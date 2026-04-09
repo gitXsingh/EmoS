@@ -1,44 +1,100 @@
-# EmoS Project
+# EmoS
 
-Welcome to the EmoS repository!
+EmoS is a Flask-based mental wellness web app with two core flows:
 
-## Description
-EmoS is a modern, full-stack machine learning web app for mental health risk prediction and PHQ-9 depression screening. It features a beautiful Claude-inspired UI with glassmorphism, dark mode, and a responsive design. Built with Python and Flask, it uses a trained Random Forest model to provide personalized wellness recommendations.
+- Mental health risk prediction from lifestyle inputs
+- PHQ-9 depression screening with score-based guidance
 
-## Getting Started
+The app combines a trained ML model (for risk classification) with rule-based wellness recommendations.
+
+## What This Project Does
+
+### 1) Mental health risk prediction
+Users submit:
+- sleep duration and sleep quality
+- stress level
+- activity level
+- heart rate and daily steps
+- screen time and social interaction
+- mood swings
+
+The backend engineers additional features, scales them, runs model inference, and returns:
+- `HIGH RISK` or `LOW RISK`
+- wellness score (`0-100`)
+- personalized recommendations
+
+### 2) PHQ-9 screening
+The app includes a standard 9-question PHQ-9 form and returns:
+- total score (`0-27`)
+- severity band
+- guidance text based on score range
+
+## Tech Stack
+
+- Python
+- Flask
+- scikit-learn
+- NumPy
+- Jinja2 templates (in `app_human.py` mode)
+
+## Project Structure
+
+- `app_human.py` - main Flask app using template files from `templates/`
+- `app_flask.py` - alternative single-file version using inline HTML/CSS
+- `phq9.py` - PHQ-9 questions, scoring, severity mapping, recommendations
+- `templates/` - UI templates (`home`, `result`, `phq9`, `base`)
+- `static/` - CSS and JS assets
+- `requirements.txt` - Python dependencies
+- `Sleep_health_and_lifestyle_dataset.csv` - dataset asset in repo
+
+## Setup
 
 ### Prerequisites
 - Python 3.8+
-- pip (Python package manager)
+- `pip`
 
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone <your-repo-url>
-   cd EmoS
-   ```
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Ensure `mental_health_model.pkl` is present in the project root (already included if you cloned the repo).
+### Install
+```bash
+pip install -r requirements.txt
+```
 
-### Running the App
+### Model file requirement
+The app expects `mental_health_model.pkl` in the project root.
+
+If this file is missing, startup fails with a file-not-found error. Place the trained model bundle in the root before running either app entrypoint.
+
+## Run
+
+Recommended (template-based version):
+
+```bash
+python app_human.py
+```
+
+Alternative (single-file inline UI version):
+
 ```bash
 python app_flask.py
 ```
-Then open your browser and go to [http://localhost:5000](http://localhost:5000)
 
-## Features
-- 🧠 **Mental Health Risk Prediction**: Enter lifestyle and health data to get a risk assessment and wellness score.
-- 📋 **PHQ-9 Depression Screening**: Take the PHQ-9 quiz and receive severity and recommendations.
-- 💬 **Modern UI**: Claude-inspired, glassy, and responsive interface.
-- 🌙 **Dark Mode**: Toggle dark/light mode (persists across pages).
-- ⚡ **Personalized Recommendations**: Actionable tips based on your data and model prediction.
-- 🔗 **Instant Navigation**: Click the "EmoS" logo to return home from any page.
+Then open: [http://localhost:5000](http://localhost:5000)
 
-## Contributing
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+## Notes and Limitations
 
-## License
-This project is licensed under the MIT License. 
+- This project is for educational/prototyping use.
+- Outputs are not a clinical diagnosis.
+- PHQ-9 results should not replace professional care.
+
+If someone is in immediate danger or crisis, contact local emergency services or a crisis helpline right away.
+
+## Troubleshooting
+
+- **`FileNotFoundError: mental_health_model.pkl`**
+  - Add `mental_health_model.pkl` to the project root.
+
+- **Import/dependency errors**
+  - Reinstall deps with `pip install -r requirements.txt`.
+  - Use a clean virtual environment if versions conflict.
+
+- **Port already in use**
+  - Stop the process using port `5000`, or run Flask on a different port.
