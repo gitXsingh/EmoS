@@ -98,3 +98,25 @@ If someone is in immediate danger or crisis, contact local emergency services or
 
 - **Port already in use**
   - Stop the process using port `5000`, or run Flask on a different port.
+
+## Screenshots and Diagram
+
+### 1) System Flow Diagram
+This diagram shows the full end-to-end flow from browser input to ML inference, PHQ-9 scoring, and unified feedback output.
+<img src="./docs/diagrams/figure-4-1-emos-end-to-end-flow.png" alt="EmoS End-to-End System Flow Diagram" width="900" />
+
+### 2) Home Prediction Form
+This screen captures the lifestyle input form used for mental health risk prediction.
+<img src="./docs/screenshots/app-home-prediction-form.png" alt="Home Prediction Form" width="900" />
+
+### 3) Prediction Result (Low Risk)
+This screen shows the model prediction output with wellness score and personalized recommendation.
+<img src="./docs/screenshots/app-prediction-result-low-risk.png" alt="Prediction Result Low Risk" width="900" />
+
+### 4) PHQ-9 Form (Completed Inputs)
+This screen shows the PHQ-9 questionnaire after responses are selected and before score submission.
+<img src="./docs/screenshots/app-phq9-form-complete-filled.png" alt="PHQ-9 Form Complete Filled" width="900" />
+
+### 5) PHQ-9 Result
+This screen shows the computed PHQ-9 score, severity level, and guidance recommendations.
+<img src="./docs/screenshots/app-phq9-result-mild-depression.png" alt="PHQ-9 Result Mild Depression" width="900" />
