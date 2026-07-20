@@ -2,18 +2,25 @@ from flask import Flask, render_template, request
 import numpy as np
 import pickle
 import os
+import sys
+import traceback
 from phq9 import PHQ9_QUESTIONS, PHQ9_OPTIONS, calculate_phq9_score
 
 app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-with open(os.path.join(BASE_DIR, 'mental_health_model.pkl'), 'rb') as f:
-    loaded = pickle.load(f)
-    model_data = {
-        'model': loaded['model'],
-        'scaler': loaded['scaler']
-    }
+try:
+    with open(os.path.join(BASE_DIR, 'mental_health_model.pkl'), 'rb') as f:
+        loaded = pickle.load(f)
+        model_data = {
+            'model': loaded['model'],
+            'scaler': loaded['scaler']
+        }
+except Exception as e:
+    print(f'MODEL LOAD ERROR: {e}', file=sys.stderr)
+    traceback.print_exc(file=sys.stderr)
+    model_data = None
 
 def calculate_wellness_score(user_data):
     score = 0
@@ -99,6 +106,8 @@ def result():
         sleep_efficiency, activity_stress_ratio, sleep_quality_ratio
     ]).reshape(1, -1)
 
+    if model_data is None:
+        return 'Model failed to load - check server logs', 500
     features_scaled = model_data['scaler'].transform(features)
     prediction = model_data['model'].predict(features_scaled)[0]
     wellness_score = calculate_wellness_score(user_data)
