@@ -5,12 +5,18 @@ from phq9 import PHQ9_QUESTIONS, PHQ9_OPTIONS, calculate_phq9_score
 
 app = Flask(__name__)
 
-with open('mental_health_model.pkl', 'rb') as f:
-    loaded = pickle.load(f)
-    model_data = {
-        'model': loaded['model'],
-        'scaler': loaded['scaler']
-    }
+import sys
+
+try:
+    with open('mental_health_model.pkl', 'rb') as f:
+        loaded = pickle.load(f)
+        model_data = {
+            'model': loaded['model'],
+            'scaler': loaded['scaler']
+        }
+except Exception as e:
+    print(f'ERROR loading model: {e}', file=sys.stderr)
+    raise
 
 def calculate_wellness_score(user_data):
     score = 0
