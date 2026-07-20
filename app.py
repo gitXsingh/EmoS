@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+model_load_error = None
 try:
     with open(os.path.join(BASE_DIR, 'mental_health_model.pkl'), 'rb') as f:
         loaded = pickle.load(f)
@@ -18,6 +19,7 @@ try:
             'scaler': loaded['scaler']
         }
 except Exception as e:
+    model_load_error = str(e)
     print(f'MODEL LOAD ERROR: {e}', file=sys.stderr)
     traceback.print_exc(file=sys.stderr)
     model_data = None
@@ -107,7 +109,7 @@ def result():
     ]).reshape(1, -1)
 
     if model_data is None:
-        return 'Model failed to load - check server logs', 500
+        return f'Model load error: {model_load_error}', 500
     features_scaled = model_data['scaler'].transform(features)
     prediction = model_data['model'].predict(features_scaled)[0]
     wellness_score = calculate_wellness_score(user_data)
