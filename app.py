@@ -1,24 +1,16 @@
 from flask import Flask, render_template, request
 import numpy as np
 import pickle
-import os
 from phq9 import PHQ9_QUESTIONS, PHQ9_OPTIONS, calculate_phq9_score
 
 app = Flask(__name__)
 
-model_data = None
-
-def get_model():
-    global model_data
-    if model_data is not None:
-        return model_data
-    with open(os.path.join(os.path.dirname(__file__), 'mental_health_model.pkl'), 'rb') as f:
-        loaded = pickle.load(f)
-        model_data = {
-            'model': loaded['model'],
-            'scaler': loaded['scaler']
-        }
-    return model_data
+with open('mental_health_model.pkl', 'rb') as f:
+    loaded = pickle.load(f)
+    model_data = {
+        'model': loaded['model'],
+        'scaler': loaded['scaler']
+    }
 
 def calculate_wellness_score(user_data):
     score = 0
@@ -104,9 +96,8 @@ def result():
         sleep_efficiency, activity_stress_ratio, sleep_quality_ratio
     ]).reshape(1, -1)
 
-    m = get_model()
-    features_scaled = m['scaler'].transform(features)
-    prediction = m['model'].predict(features_scaled)[0]
+    features_scaled = model_data['scaler'].transform(features)
+    prediction = model_data['model'].predict(features_scaled)[0]
     wellness_score = calculate_wellness_score(user_data)
     recommendations = get_personalized_recommendations(user_data, prediction)
     risk = 'HIGH RISK' if prediction == 1 else 'LOW RISK'
@@ -120,25 +111,6 @@ def phq9():
         responses = [int(request.form.get(f'q{i}', 0)) for i in range(9)]
         result = calculate_phq9_score(responses)
     return render_template('phq9.html', questions=PHQ9_QUESTIONS, options=PHQ9_OPTIONS, result=result)
-
-@app.route('/health')
-def health():
-    import sys
-    info = {
-        'cwd': os.getcwd(),
-        'files': os.listdir('.'),
-        'templates_exists': os.path.isdir('templates'),
-        'model_exists': os.path.isfile('mental_health_model.pkl'),
-        'python_version': sys.version,
-    }
-    try:
-        m = get_model()
-        info['model_loaded'] = True
-        info['model_keys'] = list(m.keys())
-    except Exception as e:
-        info['model_loaded'] = False
-        info['model_error'] = str(e)
-    return info
 
 if __name__ == '__main__':
     app.run(debug=True)
