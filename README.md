@@ -19,7 +19,7 @@ Users submit:
 - mood swings
 
 The backend engineers additional features, scales them, runs model inference, and returns:
-- `HIGH RISK` or `LOW RISK`
+- `LOW RISK`, `MODERATE RISK`, or `HIGH RISK`
 - wellness score (`0-100`)
 - personalized recommendations
 
@@ -35,17 +35,7 @@ The app includes a standard 9-question PHQ-9 form and returns:
 - Flask
 - scikit-learn
 - NumPy
-- Jinja2 templates (in `app_human.py` mode)
-
-## Project Structure
-
-- `app_human.py` - main Flask app using template files from `templates/`
-- `app_flask.py` - alternative single-file version using inline HTML/CSS
-- `phq9.py` - PHQ-9 questions, scoring, severity mapping, recommendations
-- `templates/` - UI templates (`home`, `result`, `phq9`, `base`)
-- `static/` - CSS and JS assets
-- `requirements.txt` - Python dependencies
-- `Sleep_health_and_lifestyle_dataset.csv` - dataset asset in repo
+- Jinja2 templates
 
 ## Setup
 
@@ -58,23 +48,10 @@ The app includes a standard 9-question PHQ-9 form and returns:
 pip install -r requirements.txt
 ```
 
-### Model file requirement
-The app expects `mental_health_model.pkl` in the project root.
-
-If this file is missing, startup fails with a file-not-found error. Place the trained model bundle in the root before running either app entrypoint.
-
 ## Run
 
-Recommended (template-based version):
-
 ```bash
-python app_human.py
-```
-
-Alternative (single-file inline UI version):
-
-```bash
-python app_flask.py
+python app.py
 ```
 
 Then open: [http://localhost:5000](http://localhost:5000)
@@ -88,9 +65,6 @@ Then open: [http://localhost:5000](http://localhost:5000)
 If someone is in immediate danger or crisis, contact local emergency services or a crisis helpline right away.
 
 ## Troubleshooting
-
-- **`FileNotFoundError: mental_health_model.pkl`**
-  - Add `mental_health_model.pkl` to the project root.
 
 - **Import/dependency errors**
   - Reinstall deps with `pip install -r requirements.txt`.
