@@ -79,8 +79,6 @@ print(fi_df.to_string(index=False))
 model_data = {
     'model': model,
     'scaler': scaler,
-    'feature_names': feature_names,
-    'feature_importance': fi_df,
 }
 
 with open('mental_health_model.pkl', 'wb') as f:
