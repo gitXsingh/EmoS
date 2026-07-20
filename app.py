@@ -5,7 +5,6 @@ from phq9 import PHQ9_QUESTIONS, PHQ9_OPTIONS, calculate_phq9_score
 
 app = Flask(__name__)
 
-# Load model and scaler at startup
 with open('mental_health_model.pkl', 'rb') as f:
     loaded = pickle.load(f)
     model_data = {

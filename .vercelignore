@@ -1,0 +1,9 @@
+docs/
+*.png
+__pycache__/
+*.pyc
+.git
+README.md
+generate_data.py
+train_model.py
+compress_model.py
